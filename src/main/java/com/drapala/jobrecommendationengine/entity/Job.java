@@ -4,22 +4,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 
 @Entity
-@Data
-public class Job {
+@Table(name = "jobs")
+public record Job(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        Long id,
 
-    private String title;
-    private String description;
-    private String company;
-    private String location;
-    private String requirements;
-    private String salary;
+        @Column(nullable = false)
+        String title,
 
-    // Additional fields and methods if needed
-}
+        String description,
+        String company,
+        String location,
+        String requirements,
+        String salary
+
+) {}

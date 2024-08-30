@@ -29,11 +29,14 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa") // JPA for database support
 
+	// Dependência do Apache Commons Text para cálculo de similaridade de texto
+	implementation("org.apache.commons:commons-text:1.10.0") // ou a versão mais recente disponível
+
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	// Remove PostgreSQL runtime dependency since H2 is used for tests
-	// runtimeOnly("org.postgresql:postgresql")
+	// Dependência para banco de dados H2 nos testes
+	testImplementation("com.h2database:h2")
 
 	annotationProcessor("org.projectlombok:lombok")
 
@@ -41,7 +44,6 @@ dependencies {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	testImplementation("org.springframework.kafka:spring-kafka-test")
-	testImplementation("com.h2database:h2") // Include H2 for testing
 }
 
 tasks.withType<Test> {
