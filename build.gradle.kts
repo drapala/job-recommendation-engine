@@ -36,6 +36,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	// Dependência para banco de dados H2 nos testes
+	runtimeOnly("com.h2database:h2:2.1.214")
 	testImplementation("com.h2database:h2")
 
 	annotationProcessor("org.projectlombok:lombok")

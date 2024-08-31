@@ -22,6 +22,6 @@ public record Job(
         String company,
         String location,
         String requirements,
-        String salary
+        Double salary
 
 ) {}
