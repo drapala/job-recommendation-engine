@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa") // JPA for database support
+	implementation("io.trino:trino-jdbc:455")
 
 	// Dependência do Apache Commons Text para cálculo de similaridade de texto
 	implementation("org.apache.commons:commons-text:1.10.0") // ou a versão mais recente disponível
