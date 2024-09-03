@@ -11,17 +11,21 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+    private final JobRecommendationService jobRecommendationService;
 
     @Autowired
-    private JobRecommendationService jobRecommendationService;
+    public JobController(JobRepository jobRepository, JobRecommendationService jobRecommendationService) {
+        this.jobRepository = jobRepository;
+        this.jobRecommendationService = jobRecommendationService;
+    }
 
     // Endpoint to get all jobs with pagination
     @GetMapping("/all")
@@ -36,7 +40,7 @@ public class JobController {
 
     // Endpoint to add a new job
     @PostMapping("/add")
-    public ResponseEntity<Job> addJob(@RequestBody Job job) {
+    public ResponseEntity<Job> addJob(@Valid @RequestBody Job job) {
         if (job.title() == null || job.description() == null) {
             return ResponseEntity.badRequest().build(); // Validate input
         }

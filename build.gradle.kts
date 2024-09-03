@@ -27,16 +27,15 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.kafka:spring-kafka")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa") // JPA for database support
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.3.0")
 	implementation("io.trino:trino-jdbc:455")
 
-	// Dependência do Apache Commons Text para cálculo de similaridade de texto
-	implementation("org.apache.commons:commons-text:1.10.0") // ou a versão mais recente disponível
+	implementation("org.apache.commons:commons-text:1.10.0")
 
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	// Dependência para banco de dados H2 nos testes
 	runtimeOnly("com.h2database:h2:2.1.214")
 	testImplementation("com.h2database:h2")
 

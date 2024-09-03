@@ -2,6 +2,7 @@ package com.drapala.jobrecommendationengine.service;
 
 import com.drapala.jobrecommendationengine.entity.Job;
 import com.drapala.jobrecommendationengine.repository.JobRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.text.similarity.CosineSimilarity;
 import org.slf4j.Logger;
@@ -21,17 +22,21 @@ public class JobRecommendationService {
 
     private static final Logger logger = LoggerFactory.getLogger(JobRecommendationService.class);
 
+    private final JobRepository jobRepository;
+    private final ObjectMapper objectMapper;
+    private final CosineSimilarity cosineSimilarity;
+
     @Autowired
-    private JobRepository jobRepository;
+    public JobRecommendationService(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
+        this.objectMapper = new ObjectMapper();
+        this.cosineSimilarity = new CosineSimilarity();
+    }
 
-    private final ObjectMapper objectMapper = new ObjectMapper(); // For JSON parsing
-
-    // Recomendação de empregos baseada em conteúdo (Content-Based Filtering)
     @Cacheable("jobRecommendations")
     public List<Job> recommendJobsBasedOnContent(String userPreferences) {
         List<Job> allJobs = jobRepository.findAll();
 
-        // Calcular a similaridade entre as preferências do usuário e as descrições de emprego
         return allJobs.stream()
                 .sorted((job1, job2) -> Double.compare(
                         calculateSimilarity(userPreferences, job2),
@@ -40,16 +45,15 @@ public class JobRecommendationService {
                 .collect(Collectors.toList());
     }
 
-    // Método para calcular a similaridade entre as preferências do usuário e o emprego
     private double calculateSimilarity(String userPreferences, Job job) {
         String combinedJobData = job.title() + " " + job.description() + " " + job.company() + " " + job.location();
-        CosineSimilarity cosineSimilarity = new CosineSimilarity();
+
         Map<CharSequence, Integer> vector1 = getVector(userPreferences);
         Map<CharSequence, Integer> vector2 = getVector(combinedJobData.toLowerCase());
+
         return cosineSimilarity.cosineSimilarity(vector1, vector2);
     }
 
-    // Converter texto em um vetor de frequência de termos
     private Map<CharSequence, Integer> getVector(String text) {
         Map<CharSequence, Integer> termFrequency = new HashMap<>();
         String[] terms = text.toLowerCase().split("\\s+");
@@ -59,18 +63,14 @@ public class JobRecommendationService {
         return termFrequency;
     }
 
-    // Consumir eventos de usuário do Kafka
     @KafkaListener(topics = "user-events", groupId = "job-recommendation-group")
     public void consumeUserEvent(String message) {
         try {
-            // Parse JSON message to extract user preferences
-            Map<String, String> userEvent = objectMapper.readValue(message, Map.class);
+            Map<String, String> userEvent = objectMapper.readValue(message, new TypeReference<Map<String, String>>() {});
             String userPreferences = userEvent.get("preferences"); // Assuming message contains "preferences" key
 
-            // Generate recommendations based on parsed user preferences
             List<Job> recommendations = recommendJobsBasedOnContent(userPreferences);
 
-            // Process recommendations, e.g., store them or send them to another service
             logger.info("Generated recommendations for user: {}", recommendations);
         } catch (Exception e) {
             logger.error("Error processing user event: {}", e.getMessage(), e);
