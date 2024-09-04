@@ -29,7 +29,8 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation:3.3.0")
-	implementation("io.trino:trino-jdbc:455")
+	implementation("com.facebook.presto:presto-jdbc:0.288.1")
+
 
 	implementation("org.apache.commons:commons-text:1.10.0")
 
