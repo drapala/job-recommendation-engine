@@ -1,6 +1,6 @@
 # Job Recommendation Engine - Java Service
 
-This microservice is part of the "Multistack Real-Time Job Recommendation Engine" and is responsible for processing job recommendations in real time by consuming events from Kafka, performing analyses using Presto, and managing structured data with MySQL.
+This microservice is part of the "Multistack Real-Time Job Recommendation Engine" and is responsible for processing job recommendations in real-time by consuming events from Kafka, performing analyses using Presto, and managing structured data with MySQL.
 
 ## Requirements
 
@@ -72,6 +72,44 @@ This microservice is part of the "Multistack Real-Time Job Recommendation Engine
    ```bash
    docker run -p 8080:8080 job-recommendation-engine
    ```
+
+### Scripts to Initialize Presto and Dependencies
+
+To make it easier to initialize Presto and its dependencies, four scripts have been created:
+
+1. **Run Presto (Bash):**
+
+   Use the `run-presto.sh` script to start the Presto container on Unix environments:
+
+   ```bash
+   ./run-presto.sh
+   ```
+
+2. **Run Presto (PowerShell):**
+
+   Use the `run-presto.ps1` script to start the Presto container on Windows environments using PowerShell:
+
+   ```powershell
+   .\run-presto.ps1
+   ```
+
+3. **Run Presto Dependencies (Bash):**
+
+   Use the `run-presto-dependencies.sh` script to start the required dependencies for Presto on Unix environments:
+
+   ```bash
+   ./run-presto-dependencies.sh
+   ```
+
+4. **Run Presto Dependencies (PowerShell):**
+
+   Use the `run-presto-dependencies.ps1` script to start the required dependencies for Presto on Windows environments using PowerShell:
+
+   ```powershell
+   .\run-presto-dependencies.ps1
+   ```
+
+These scripts simplify the initialization and configuration of the environment needed to run Presto along with its dependencies.
 
 ## Contributing
 
