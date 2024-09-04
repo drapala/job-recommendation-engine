@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.3"
 	id("io.spring.dependency-management") version "1.1.6"
+	id("io.gatling.gradle") version "3.11.5.2"
 }
 
 group = "com.drapala"
@@ -31,6 +32,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation:3.3.0")
 	implementation("com.facebook.presto:presto-jdbc:0.288.1")
 
+	testImplementation("io.gatling.highcharts:gatling-charts-highcharts:3.11.5")
+	testImplementation("io.gatling:gatling-app:3.11.5")
+	testImplementation("io.gatling:gatling-recorder:3.11.5")
 
 	implementation("org.apache.commons:commons-text:1.10.0")
 
