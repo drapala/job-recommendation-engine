@@ -1,6 +1,6 @@
 package com.drapala.jobrecommendationengine.config;
 
-import io.trino.jdbc.TrinoDriver;
+import com.facebook.presto.jdbc.PrestoDriver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,21 +9,21 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-public class TrinoConfig {
+public class PrestoConfig {
 
-    @Value("${trino.datasource.url}")
+    @Value("${presto.datasource.url}")
     private String url;
 
-    @Value("${trino.datasource.username}")
+    @Value("${presto.datasource.username}")
     private String username;
 
-    @Value("${trino.datasource.password}")
+    @Value("${presto.datasource.password}")
     private String password;
 
     @Bean
-    public DataSource trinoDataSource() {
+    public DataSource prestoDataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-        dataSource.setDriverClass(TrinoDriver.class);
+        dataSource.setDriverClass(PrestoDriver.class);
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
