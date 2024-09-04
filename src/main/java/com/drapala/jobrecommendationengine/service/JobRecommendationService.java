@@ -5,8 +5,6 @@ import com.drapala.jobrecommendationengine.repository.JobRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.text.similarity.CosineSimilarity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,8 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class JobRecommendationService {
-
-    private static final Logger logger = LoggerFactory.getLogger(JobRecommendationService.class);
 
     private final JobRepository jobRepository;
     private final ObjectMapper objectMapper;
@@ -71,9 +67,10 @@ public class JobRecommendationService {
 
             List<Job> recommendations = recommendJobsBasedOnContent(userPreferences);
 
-            logger.info("Generated recommendations for user: {}", recommendations);
+            System.out.println("Generated recommendations for user: " + recommendations);
         } catch (Exception e) {
-            logger.error("Error processing user event: {}", e.getMessage(), e);
+            System.out.println("Error processing user event: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

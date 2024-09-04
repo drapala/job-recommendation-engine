@@ -3,6 +3,7 @@ package com.drapala.jobrecommendationengine.controller;
 import com.drapala.jobrecommendationengine.entity.Job;
 import com.drapala.jobrecommendationengine.repository.JobRepository;
 import com.drapala.jobrecommendationengine.service.JobRecommendationService;
+import com.drapala.jobrecommendationengine.service.JobAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -20,11 +22,13 @@ public class JobController {
 
     private final JobRepository jobRepository;
     private final JobRecommendationService jobRecommendationService;
+    private final JobAnalysisService jobAnalysisService; // Declaração do novo serviço
 
     @Autowired
-    public JobController(JobRepository jobRepository, JobRecommendationService jobRecommendationService) {
+    public JobController(JobRepository jobRepository, JobRecommendationService jobRecommendationService, JobAnalysisService jobAnalysisService) {
         this.jobRepository = jobRepository;
         this.jobRecommendationService = jobRecommendationService;
+        this.jobAnalysisService = jobAnalysisService; // Inicializa o novo serviço
     }
 
     // Endpoint to get all jobs with pagination
@@ -81,5 +85,16 @@ public class JobController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         Page<Job> jobs = jobRepository.findBySalaryBetween(minSalary, maxSalary, pageable);
         return ResponseEntity.ok(jobs);
+    }
+
+    // Endpoint to calculate average salary by location using Spark
+    @GetMapping("/average-salary-by-location")
+    public ResponseEntity<Map<String, Double>> getAverageSalaryByLocation() {
+        List<Job> allJobs = jobRepository.findAll();
+        if (allJobs.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        Map<String, Double> averageSalaryByLocation = jobAnalysisService.calculateAverageSalaryByLocation(allJobs);
+        return ResponseEntity.ok(averageSalaryByLocation);
     }
 }
